@@ -20,16 +20,17 @@ client.on('ready', async () => {
 })
 
 client.on('message', (msg) => {
-  console.log(msg.from)
-  console.log(msg._data.notifyName + ' : ' + msg.body + '\n')
+  console.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}\n`)
   analyzeMessage(msg)
 })
 
 function analyzeMessage(msg) {
+  msg.body = msg.body.trim()
   if (msg?.body?.toUpperCase() == 'STOCURI BANCNOTE') {
+    fileLogger.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}`)
     replyCurrentStocks(msg)
   } else if (
-    msg?.body?.toUpperCase().includes('COLECTAT') ||
+    msg?.body?.toUpperCase().includes('COLECTA') ||
     msg?.body?.toUpperCase().includes('REZOLVAT')
   ) {
     politeAnswer(msg)
@@ -50,7 +51,6 @@ async function replyCurrentStocks(msg) {
       fileLogger.error(
         `Error during replying curent stocks. Retry after 5 seconds...`
       )
-      await processManager.pkill('firefox')
       await utils.sleep(5)
     }
   }

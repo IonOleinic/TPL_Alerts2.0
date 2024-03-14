@@ -14,7 +14,7 @@ async function pkill(processName) {
     if (isRunning) {
       const { exec } = await import('child_process')
       exec(`taskkill /f /im ${processName}`)
-      fileLogger.log(`${processName} process was killed.\n`)
+      fileLogger.log(`${processName} process was killed.`)
       return true
     }
     return false

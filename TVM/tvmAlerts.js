@@ -132,13 +132,9 @@ function checkIfAlertIn(alertId, alertList) {
 
 function deleteExpiredAlerts(alertList) {
   return alertList.filter((alert) => {
-    if (alert.ttl > 0) {
-      return alert
-    } else {
-      fileLogger.log(
-        `The time for alert ${alertList[i].name} ${alertList[i].date} expired.`
-      )
-    }
+    if (alert.ttl > 0) return alert
+    else
+      fileLogger.log(`The time for alert ${alert.name} ${alert.date} expired.`)
   })
 }
 
@@ -148,7 +144,7 @@ async function parseAlertsFromHtml(htmlData) {
   const tableId = 'ctl00_cphContent_gridAlerts_ctl00'
   const tableTag = $(`table#${tableId}`)
 
-  if (tableTag.length) {
+  if (tableTag) {
     let alertFound = false
     for (let i = 0; i < 10; i++) {
       const rowTag = $(`tr#${tableId}__${i}`)
@@ -192,7 +188,7 @@ async function parseAlertsFromHtml(htmlData) {
           }
           const whatsappMessage = `TPL Suceava Skayo TVM Alert\n${tvmName}\n${alertDate}\n${alertType}\n${errorType}`
           fileLogger.log(`\n${whatsappMessage}\n`)
-          whatsappClient.sendMessage(contacts.OleinicIon, whatsappMessage)
+          whatsappClient.sendMessage(contacts.EchipaRacheta, whatsappMessage)
           alertListAlreadySent.push(newAlert)
         } else {
           console.log('Message already sent on WhatsApp')
@@ -225,6 +221,7 @@ async function checkTVMAlerts() {
         await parseAlertsFromHtml(response.body)
         await utils.sleep(refreshAlert)
       } catch (error) {
+        fileLogger.error(error)
         fileLogger.error('Login Skayo error. Try again...')
         await utils.sleep(10)
         await loginSkayo()

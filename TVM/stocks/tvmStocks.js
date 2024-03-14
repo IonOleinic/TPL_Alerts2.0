@@ -177,7 +177,7 @@ async function processPdfStocks(whatsappClient) {
       fileLogger.log(`${stocksText}`)
     } else {
       fileLogger.log(`\n${stocksText}\n`)
-      whatsappClient.sendMessage(contacts.OleinicIon, stocksText)
+      whatsappClient.sendMessage(contacts.EchipaRacheta, stocksText)
     }
   } catch (error) {
     throw error
