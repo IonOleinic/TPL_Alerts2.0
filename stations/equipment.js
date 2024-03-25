@@ -92,7 +92,7 @@ class Equipment {
               `Connection with equipment ${this.name} ${this.stationName} [${this.ip}] could not be restored.`
             )
             whatsappClient.sendMessage(
-              contacts.OleinicIon,
+              contacts.EchipaRacheta,
               `Nu sa putut restabili conexiunea cu ${this.name} ${this.stationName}. Este nevoie de o interventie manuala.`
             )
             return false

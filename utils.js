@@ -2,6 +2,7 @@ const axios = require('axios')
 const { promisify } = require('util')
 const { exec } = require('child_process')
 const execAsync = promisify(exec)
+const fileLogger = require('./logger/fileLogger')
 
 function sleep(seconds) {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000))

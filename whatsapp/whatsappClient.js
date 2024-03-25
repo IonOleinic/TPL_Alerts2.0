@@ -3,11 +3,9 @@ const qrcode = require('qrcode-terminal')
 const fileLogger = require('../logger/fileLogger')
 const { getStocks } = require('../TVM/stocks/tvmStocks')
 const utils = require('../utils')
-const processManager = require('../processes/processManager')
 const authorizedContacts = require('./authorizedContacts')
 
 const client = new Client({ authStrategy: new LocalAuth() })
-// const client = new Client()
 
 client.on('qr', (qr) => {
   // Generate and scan this code with your phone
@@ -20,8 +18,15 @@ client.on('ready', async () => {
 })
 
 client.on('message', (msg) => {
-  console.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}\n`)
-  analyzeMessage(msg)
+  //check if message is not older than 5 minutes
+  // Convert the time difference to minutes
+  const timeDifferenceMinutes = Math.floor(
+    (new Date() - new Date(msg.timestamp * 1000)) / (1000 * 60)
+  )
+  if (timeDifferenceMinutes < 5) {
+    console.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}\n`)
+    analyzeMessage(msg)
+  }
 })
 
 function analyzeMessage(msg) {
@@ -48,6 +53,7 @@ async function replyCurrentStocks(msg) {
       }
       break
     } catch (error) {
+      fileLogger.error(error)
       fileLogger.error(
         `Error during replying curent stocks. Retry after 5 seconds...`
       )

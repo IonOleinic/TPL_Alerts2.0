@@ -50,17 +50,17 @@ async function downloadPdf() {
 
     const generateBtn = await driver.wait(
       until.elementLocated(By.id('ctl00_cphContent_tibGenerate')),
-      10000
+      12000
     )
     await generateBtn.click()
 
-    await driver.sleep(10000)
+    await driver.sleep(12000)
 
     await driver.switchTo().frame('Situatie stocuri curenta')
 
     const btnExportPdf = await driver.wait(
       until.elementLocated(By.id('btnExportPdf')),
-      35000
+      37000
     )
     await btnExportPdf.click()
 
@@ -69,6 +69,7 @@ async function downloadPdf() {
     await driver.quit()
   } catch (error) {
     processManager.pkill('firefox')
+    processManager.pkill('geckodriver')
     throw error
   }
 }
@@ -209,11 +210,11 @@ async function checkTVMStocks(whatsappClient) {
         waitForRetry = 5
         await utils.sleep(3600) //1h interval
       } catch (error) {
-        fileLogger.error(error)
         checkingStocksErrorCount += 1
         if (waitForRetry < 120) {
           waitForRetry = checkingStocksErrorCount * 10
         }
+        fileLogger.error(error)
         fileLogger.error(
           `Error during checking regular stocks. Retry after ${waitForRetry} seconds...`
         )
