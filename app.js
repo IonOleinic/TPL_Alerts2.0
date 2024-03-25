@@ -20,10 +20,10 @@ async function start() {
       )
     }
     await whatsappClient.initialize()
-    //checkTVMAlerts()
-    //checkTVMStocks(whatsappClient)
-    //checkMobileMessages()
-    //checkTVMEquipments()
+    checkTVMAlerts()
+    checkTVMStocks(whatsappClient)
+    checkMobileMessages()
+    checkTVMEquipments()
   } catch (error) {
     fileLogger.error(error)
     fileLogger.error('TPL ALERTS APP CRASHED!')
