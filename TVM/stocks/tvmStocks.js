@@ -42,7 +42,7 @@ async function downloadPdf() {
       By.name('ctl03$tibAuthentication')
     )
     await loginForm.click()
-    await driver.sleep(1000)
+    await driver.sleep(2000)
 
     await driver.get(
       'http://192.168.95.93/Skayo_CFM/Reporting/Local/ReportCreator.aspx?RID=428'
@@ -54,13 +54,13 @@ async function downloadPdf() {
     )
     await generateBtn.click()
 
-    await driver.sleep(12000)
+    await driver.sleep(10000)
 
     await driver.switchTo().frame('Situatie stocuri curenta')
 
     const btnExportPdf = await driver.wait(
       until.elementLocated(By.id('btnExportPdf')),
-      37000
+      77000
     )
     await btnExportPdf.click()
 

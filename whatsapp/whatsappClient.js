@@ -5,8 +5,16 @@ const { getStocks } = require('../TVM/stocks/tvmStocks')
 const utils = require('../utils')
 const authorizedContacts = require('./authorizedContacts')
 
-const client = new Client({ authStrategy: new LocalAuth() })
 // const client = new Client({})
+// const client = new Client({ authStrategy: new LocalAuth() })
+const client = new Client({
+  authStrategy: new LocalAuth({ dataPath: 'sessions' }),
+  webVersionCache: {
+    type: 'remote',
+    remotePath:
+      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
+  },
+})
 
 client.on('qr', (qr) => {
   // Generate and scan this code with your phone
@@ -19,11 +27,6 @@ client.on('ready', async () => {
 })
 
 client.on('message', (msg) => {
-  //check if message is not older than 5 minutes
-  // Convert the time difference to minutes
-  // const timeDifferenceMinutes = Math.floor(
-  //   (new Date() - new Date(msg.timestamp * 1000)) / (1000 * 60)
-  // )
   console.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}\n`)
   analyzeMessage(msg)
 })
