@@ -3,7 +3,10 @@ const qrcode = require('qrcode-terminal')
 const fileLogger = require('../logger/fileLogger')
 const { getStocks } = require('../TVM/stocks/tvmStocks')
 const utils = require('../utils')
-const authorizedContacts = require('./authorizedContacts')
+const {
+  authorizedToRespond,
+  authorizedToCollect,
+} = require('./authorizedContacts')
 
 // const client = new Client({})
 // const client = new Client({ authStrategy: new LocalAuth() })
@@ -33,26 +36,25 @@ client.on('message', (msg) => {
 
 function analyzeMessage(msg) {
   msg.body = msg.body.trim()
-  if (msg?.body?.toUpperCase() == 'STOCURI BANCNOTE') {
-    fileLogger.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}`)
-    replyCurrentStocks(msg)
-  } else if (
-    msg?.body?.toUpperCase().includes('COLECTA') ||
-    msg?.body?.toUpperCase().includes('REZOLVAT')
-  ) {
-    politeAnswer(msg)
+  if (authorizedToRespond.includes(msg.from)) {
+    if (msg?.body?.toUpperCase() == 'STOCURI BANCNOTE') {
+      fileLogger.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}`)
+      replyCurrentStocks(msg)
+    } else if (
+      msg?.body?.toUpperCase().includes('COLECTA') ||
+      msg?.body?.toUpperCase().includes('REZOLVAT')
+    ) {
+      if (authorizedToCollect.includes(msg.from)) politeAnswer(msg)
+    }
+  } else {
+    msg.reply('Nu sunteti autorizat.')
+    fileLogger.warning(`${msg.from} is not authorized to check current stocks.`)
   }
 }
 async function replyCurrentStocks(msg) {
   while (true) {
     try {
-      if (authorizedContacts.includes(msg.from)) {
-        msg.reply(await getStocks('yes'))
-      } else {
-        fileLogger.warning(
-          `${msg.from} is not authorized to check current stocks.`
-        )
-      }
+      msg.reply(await getStocks('yes'))
       break
     } catch (error) {
       fileLogger.error(error)
@@ -64,8 +66,6 @@ async function replyCurrentStocks(msg) {
   }
 }
 async function politeAnswer(msg) {
-  if (authorizedContacts.includes(msg.from)) {
-    msg.reply(`Ok. Multumesc.`)
-  }
+  msg.reply(`Ok. Multumesc.`)
 }
 module.exports = client

@@ -1,6 +1,6 @@
 const contacts = require('./contacts.json')
 
-const authorizedContacts = [
+const authorizedToRespond = [
   contacts.EchipaRacheta,
   contacts.OleinicIon,
   contacts.costyfm,
@@ -10,4 +10,11 @@ const authorizedContacts = [
   contacts.Ionut,
 ]
 
-module.exports = authorizedContacts
+const authorizedToCollect = [
+  contacts.costyfm,
+  contacts.Eugen,
+  contacts.Claudiu,
+  contacts.OleinicIon,
+]
+
+module.exports = { authorizedToRespond, authorizedToCollect }

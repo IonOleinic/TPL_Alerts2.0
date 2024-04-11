@@ -175,7 +175,7 @@ async function parseAlertsFromHtml(htmlData) {
         if (!checkIfAlertIn(alertId, alertListAlreadySent)) {
           const now = DateTime.now()
           const alertTTL =
-            now.hour < 5 && now.hour > 21
+            now.hour < 5 || now.hour > 21
               ? (60 * 60) / refreshAlert
               : defaultAlertTtl
 

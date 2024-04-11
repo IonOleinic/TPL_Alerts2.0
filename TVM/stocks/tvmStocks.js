@@ -50,21 +50,25 @@ async function downloadPdf() {
 
     const generateBtn = await driver.wait(
       until.elementLocated(By.id('ctl00_cphContent_tibGenerate')),
-      12000
+      20000
     )
     await generateBtn.click()
 
-    await driver.sleep(10000)
+    await driver.sleep(15000)
 
     await driver.switchTo().frame('Situatie stocuri curenta')
 
     const btnExportPdf = await driver.wait(
       until.elementLocated(By.id('btnExportPdf')),
-      77000
+      120000
     )
     await btnExportPdf.click()
 
-    await driver.sleep(25000) // Allow sufficient time for downloading PDF
+    await driver.sleep(30000) // sow much time because of low network speed. There are some issues maybe. TEMPORAR VALUE
+    // const pdfFileName = await waitForFile('Situatie stocuri', 120000) // Wait up to 120 seconds for PDF file to be downloaded
+    // if (!pdfFileName) {
+    //   throw new Error('PDF file not found within timeout.')
+    // }
 
     await driver.quit()
   } catch (error) {
@@ -98,16 +102,19 @@ function findPdf(partialName) {
   const fullList = fs.readdirSync(downloadsPath)
   let latestDate = 0
   let foundFile = null
-
+  const currentTime = Date.now() // Current time in milliseconds
   for (const file of fullList) {
     if (partialName && file.includes(partialName)) {
       const filePath = path.join(downloadsPath, file)
       const { name, ext } = path.parse(filePath)
       if (ext === '.pdf') {
         const fileCreationTime = fs.statSync(filePath).ctimeMs
-        if (fileCreationTime > latestDate) {
-          latestDate = fileCreationTime
-          foundFile = file
+        // Check if file was created within the last 10 minutes
+        if (currentTime - fileCreationTime <= 10 * 60 * 1000) {
+          if (fileCreationTime > latestDate) {
+            latestDate = fileCreationTime
+            foundFile = file
+          }
         }
       }
     }
@@ -153,6 +160,19 @@ function deletePdfByPartialName(partialName) {
   } catch (error) {
     throw error
   }
+}
+
+// Function to wait for file to be found or timeout
+async function waitForFile(partialName, timeout) {
+  const startTime = Date.now()
+  while (Date.now() - startTime < timeout) {
+    const file = findPdf(partialName)
+    if (file) {
+      return file // File found, return its name
+    }
+    await new Promise((resolve) => setTimeout(resolve, 5000)) // Check every second
+  }
+  return null // Timeout reached, file not found
 }
 
 async function getStocks(all) {
