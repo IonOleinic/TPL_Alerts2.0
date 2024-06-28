@@ -6,7 +6,6 @@ const { checkTVMEquipments } = require('./stations/stationChecker')
 const fileLogger = require('./logger/fileLogger')
 const networkManager = require('./network/networkManager')
 const utils = require('./utils')
-const { authorizedToCollect } = require('./whatsapp/authorizedContacts')
 
 async function start() {
   try {

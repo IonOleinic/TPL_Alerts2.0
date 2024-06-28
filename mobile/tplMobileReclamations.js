@@ -97,10 +97,9 @@ async function checkMobileMessages() {
           fileLogger.error(
             '(TPL Mobile) Error logging in to TPL Mobile. Retrying...'
           )
-          jwtToken = await loginTplMobile()
-        } else {
-          fileLogger.error(error)
         }
+        fileLogger.error(error)
+        jwtToken = await loginTplMobile()
       }
     }
   } catch (error) {

@@ -15,7 +15,7 @@ const client = new Client({
   webVersionCache: {
     type: 'remote',
     remotePath:
-      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
+      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2410.1.html',
   },
 })
 
@@ -36,19 +36,16 @@ client.on('message', (msg) => {
 
 function analyzeMessage(msg) {
   msg.body = msg.body.trim()
-  if (authorizedToRespond.includes(msg.from)) {
-    if (msg?.body?.toUpperCase() == 'STOCURI BANCNOTE') {
+  if (msg?.body?.toUpperCase() == 'STOCURI BANCNOTE') {
+    if (authorizedToRespond.includes(msg.from)) {
       fileLogger.log(`${msg.from} (${msg._data.notifyName}) : ${msg.body}`)
       replyCurrentStocks(msg)
-    } else if (
-      msg?.body?.toUpperCase().includes('COLECTA') ||
-      msg?.body?.toUpperCase().includes('REZOLVAT')
-    ) {
-      if (authorizedToCollect.includes(msg.from)) politeAnswer(msg)
+    } else {
+      msg.reply('Nu sunteti autorizat.')
+      fileLogger.warning(
+        `${msg.from} is not authorized to check current stocks.`
+      )
     }
-  } else {
-    msg.reply('Nu sunteti autorizat.')
-    fileLogger.warning(`${msg.from} is not authorized to check current stocks.`)
   }
 }
 async function replyCurrentStocks(msg) {
