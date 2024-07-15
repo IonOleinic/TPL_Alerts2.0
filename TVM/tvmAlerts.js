@@ -160,12 +160,12 @@ async function parseAlertsFromHtml(htmlData) {
           errorType = 'Eroare BNR'
         } else if (errorType.toUpperCase().includes('POS')) {
           errorType = 'Eroare POS'
-        } else if (errorType.toUpperCase().includes('CARDDISPENSER')) {
-          errorType = 'Eroare imprimanta carduri'
-        } else if (errorType.toUpperCase().includes('RECEIPTPRINTER')) {
-          errorType = 'Eroare imprimanta chitante'
         } else if (errorType.toUpperCase().includes('QR')) {
           errorType = 'Eroare imprimanta bilete'
+        } else if (errorType.toUpperCase().includes('RECEIPTPRINTER')) {
+          errorType = 'Eroare imprimanta chitante'
+        } else if (errorType.toUpperCase().includes('CARDDISPENSER')) {
+          errorType = 'Eroare imprimanta carduri'
         } else {
           errorType = 'Eroare generala'
         }
