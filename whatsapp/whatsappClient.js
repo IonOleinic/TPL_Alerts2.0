@@ -9,15 +9,15 @@ const {
 } = require('./authorizedContacts')
 
 // const client = new Client({})
-// const client = new Client({ authStrategy: new LocalAuth() })
-const client = new Client({
-  authStrategy: new LocalAuth({ dataPath: 'sessions' }),
-  webVersionCache: {
-    type: 'remote',
-    remotePath:
-      'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2410.1.html',
-  },
-})
+const client = new Client({ authStrategy: new LocalAuth() })
+// const client = new Client({
+//   authStrategy: new LocalAuth({ dataPath: 'sessions' }),
+//   webVersionCache: {
+//     type: 'remote',
+//     remotePath:
+//       'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2410.1.html',
+//   },
+// })
 
 client.on('qr', (qr) => {
   // Generate and scan this code with your phone

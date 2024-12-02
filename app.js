@@ -20,6 +20,8 @@ async function start() {
       )
     }
     await whatsappClient.initialize()
+    await utils.sleep(30)
+    // something wrong with initialization of whatsapp client. It ends before all initialization stuff, that means sending message before initialization, that causes crash. So, was added manualy 30 second delay to scan QR when it starts (the cache is not working!)
     checkTVMAlerts()
     checkTVMStocks(whatsappClient)
     checkMobileMessages()
