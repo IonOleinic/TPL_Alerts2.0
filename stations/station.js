@@ -12,7 +12,13 @@ class Station {
     ipReleyPanou
   ) {
     this.stationName = stationName
-    this.panou = new Equipment(stationName, 'Panou', ipPanou, ipReleyPanou)
+    this.panou = new Equipment(
+      stationName,
+      'Panou',
+      ipPanou,
+      ipSwitch,
+      ipReleyPanou
+    )
     this.tvm = new Equipment(stationName, 'TVM', ipTVM)
     this.camera = new Equipment(stationName, 'Camera', ipCamera)
     this.switch = new Equipment(stationName, 'Switch', ipSwitch)

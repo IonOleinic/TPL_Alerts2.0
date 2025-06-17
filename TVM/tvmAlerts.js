@@ -18,6 +18,22 @@ const refreshAlertDefault = 25
 let refreshAlert = refreshAlertDefault
 const waitTime = 30 * 60 // Default wait time
 
+function parseAlertDate(alertDate) {
+  const [day, month, year, hours, minutes, seconds] = alertDate
+    .match(/\d+/g)
+    .map(Number)
+
+  const parsedAlertDate = new Date(
+    year,
+    month - 1,
+    day,
+    hours,
+    minutes,
+    seconds
+  )
+  return parsedAlertDate
+}
+
 function getRequest(url, jar) {
   const requestOptions = {
     url,
@@ -104,7 +120,7 @@ async function loginSkayo() {
     const txt_password = 'ticketing'
     const tib_authentication = 'Autentificare'
 
-    let payload = {
+    const payload = {
       ctl03_ctl00_TSM: ctl03_ctl00_TSM,
       __VIEWSTATE: __VIEWSTATE,
       __VIEWSTATEGENERATOR: __VIEWSTATEGENERATOR,
@@ -172,26 +188,33 @@ async function parseAlertsFromHtml(htmlData) {
         console.log(
           `\nHardware defect detected!!!\n${tvmName}\n${alertDate}\n${alertType}\n${errorType}\n`
         )
-        if (!checkIfAlertIn(alertId, alertListAlreadySent)) {
-          const now = DateTime.now()
-          const alertTTL =
-            now.hour < 5 || now.hour > 21
-              ? (60 * 60) / refreshAlert
-              : defaultAlertTtl
 
-          const newAlert = {
-            id: alertId,
-            name: tvmName,
-            date: alertDate,
-            type: alertType,
-            ttl: alertTTL,
-          }
-          const whatsappMessage = `TPL Suceava Skayo TVM Alert\n${tvmName}\n${alertDate}\n${alertType}\n${errorType}`
-          fileLogger.log(`\n${whatsappMessage}\n`)
-          whatsappClient.sendMessage(contacts.EchipaRacheta, whatsappMessage)
-          alertListAlreadySent.push(newAlert)
+        const now = DateTime.now()
+        const timeDifference = Math.abs(now - parseAlertDate(alertDate)) / 60000 //time difference in minutes between current date and displayed alert date (old alert)
+        if (timeDifference > 60) {
+          // timeDifference should be less than 60 minutes (if more than 60 min, means wrong alert date)
+          console.log('Alert time difference more than 1 hour !!!')
         } else {
-          console.log('Message already sent on WhatsApp')
+          if (!checkIfAlertIn(alertId, alertListAlreadySent)) {
+            const alertTTL =
+              now.hour < 5 || now.hour > 21
+                ? (60 * 60) / refreshAlert
+                : defaultAlertTtl
+
+            const newAlert = {
+              id: alertId,
+              name: tvmName,
+              date: alertDate,
+              type: alertType,
+              ttl: alertTTL,
+            }
+            const whatsappMessage = `TPL Suceava Skayo TVM Alert\n${tvmName}\n${alertDate}\n${alertType}\n${errorType}`
+            fileLogger.log(`\n${whatsappMessage}\n`)
+            whatsappClient.sendMessage(contacts.EchipaRacheta, whatsappMessage)
+            alertListAlreadySent.push(newAlert)
+          } else {
+            console.log('Message already sent on WhatsApp')
+          }
         }
       }
     }

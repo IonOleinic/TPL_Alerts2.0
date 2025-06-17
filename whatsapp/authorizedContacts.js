@@ -5,7 +5,7 @@ const authorizedToRespond = [
   contacts.OleinicIon,
   contacts.costyfm,
   contacts.AnaSimona,
-  contacts.Claudiu,
+  contacts.Florin,
   contacts.Eugen,
   contacts.Ionut,
 ]
@@ -13,7 +13,7 @@ const authorizedToRespond = [
 const authorizedToCollect = [
   contacts.costyfm,
   contacts.Eugen,
-  contacts.Claudiu,
+  contacts.Florin,
   contacts.OleinicIon,
 ]
 

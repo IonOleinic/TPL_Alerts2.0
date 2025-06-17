@@ -12,17 +12,23 @@ def parse_pdf(pdf_path,all):
                     pdf_reader = PyPDF2.PdfReader(file)
                     num_pages = len(pdf_reader.pages)
                     list_to_collect = []
+                    nr_bancnote = 0
+                    nume_TVM = ''
                     for i in range(num_pages):
                         page = pdf_reader.pages[i]
                         text = page.extract_text()
                         lines = text.splitlines()
                         for i in range(10, len(lines)):
                             line = lines[i].split(' ')
-                            if (len(line) > 30):
-                                nume_TVM = " ".join(line[30:])
+                            if (len(line) > 25):
+                                if(len(line) == 26): # catedrala case
+                                    nume_TVM = " ".join(line[25:])
+                                    nr_bancnote = int(line[10])
+                                else:
+                                    nume_TVM = " ".join(line[30:])
+                                    nr_bancnote = int(line[11])
                                 if ("Stefan" in nume_TVM):
                                     nume_TVM = "Colegiul Stefan cel Mare"
-                                nr_bancnote = int(line[11])
                                 if all=='yes' and not "Test" in nume_TVM:
                                     stoc = (nume_TVM, nr_bancnote)
                                     list_to_collect.append(stoc)

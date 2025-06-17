@@ -10,7 +10,7 @@ function sleep(seconds) {
 
 async function sendPingToIp(ip) {
   let result = true
-  if (ip && ip !== 'undefined' && ip[0].toUpperCase() !== 'X') {
+  if (isValidIp(ip)) {
     try {
       const { stdout } = await execAsync(`ping -n 4 ${ip}`)
       if (stdout.includes('Received = 0') || stdout.includes('unreachable')) {
@@ -19,6 +19,8 @@ async function sendPingToIp(ip) {
     } catch (error) {
       fileLogger.error(error)
     }
+  } else {
+    result = false
   }
   return result
 }
@@ -44,4 +46,10 @@ async function toggleReley(ipReley) {
   }
   return false
 }
-module.exports = { sleep, sendPingToIp, toggleReley }
+function isValidIp(ip) {
+  if (ip && ip !== 'undefined' && ip[0].toUpperCase() !== 'X') {
+    return true
+  }
+  return false
+}
+module.exports = { sleep, sendPingToIp, toggleReley, isValidIp }
