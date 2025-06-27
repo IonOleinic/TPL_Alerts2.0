@@ -1,1 +1,1 @@
-npm install github:pedroslopez/whatsapp-web.js#webpack-exodus     //at the current time this branch is deleted, it is on testing
+npm i whatsapp-web.js     //v.1.30.0

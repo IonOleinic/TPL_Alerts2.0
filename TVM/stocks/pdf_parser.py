@@ -20,13 +20,16 @@ def parse_pdf(pdf_path,all):
                         lines = text.splitlines()
                         for i in range(10, len(lines)):
                             line = lines[i].split(' ')
-                            if (len(line) > 25):
-                                if(len(line) == 26): # catedrala case
-                                    nume_TVM = " ".join(line[25:])
-                                    nr_bancnote = int(line[10])
-                                else:
-                                    nume_TVM = " ".join(line[30:])
-                                    nr_bancnote = int(line[11])
+                            if (len(line) > 29):
+                                try:
+                                    if(len(line) == 30): # catedrala case
+                                        nume_TVM = " ".join(line[29:])
+                                        nr_bancnote = int(line[10])
+                                    else:
+                                        nume_TVM = " ".join(line[30:])
+                                        nr_bancnote = int(line[11])
+                                except:
+                                    nr_bancnote = -1
                                 if ("Stefan" in nume_TVM):
                                     nume_TVM = "Colegiul Stefan cel Mare"
                                 if all=='yes' and not "Test" in nume_TVM:
