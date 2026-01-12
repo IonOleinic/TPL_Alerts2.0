@@ -8,12 +8,13 @@ const authorizedToRespond = [
   contacts.Bogdan,
   contacts.Eugen,
   contacts.Ionut,
+  contacts.Cristian,
 ]
 
 const authorizedToCollect = [
   contacts.costyfm,
   contacts.Eugen,
-  contacts.Bogdan,
+  contacts.Cristian,
   contacts.OleinicIon,
 ]
 
